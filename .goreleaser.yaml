@@ -1,0 +1,46 @@
+env:
+  - DOCKER_REGISTRY={{ if index .Env "DOCKER_REGISTRY"  }}{{ .Env.DOCKER_REGISTRY }}{{ else }}localrepo{{ end }}
+before:
+  hooks:
+    - go mod tidy
+builds:
+  - binary: jiralert
+    env: [ CGO_ENABLED=0 ]
+    goos: [ linux ]
+    goarch: [ amd64 ]
+    main: ./cmd/jiralert
+dockers:
+  - use: buildx
+    image_templates:
+      - "{{ .Env.DOCKER_REGISTRY }}/jiralert:latest"
+      - "{{ .Env.DOCKER_REGISTRY }}/jiralert:{{ .Version }}"
+changelog:
+  use: github
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - Merge pull request
+      - Merge remote-tracking branch
+      - Merge branch
+  groups:
+    - title: Dependency updates
+      regexp: '^.*?(feat|fix)\(deps\)!?:.+$'
+      order: 300
+    - title: 'New Features'
+      regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
+      order: 100
+    - title: 'Bug fixes'
+      regexp: '^.*?fix(\([[:word:]]+\))??!?:.+$'
+      order: 200
+    - title: 'Documentation updates'
+      regexp: ^.*?doc(\([[:word:]]+\))??!?:.+$
+      order: 400
+    - title: 'Build process updates'
+      regexp: ^.*?build(\([[:word:]]+\))??!?:.+$
+      order: 400
+    - title: Other work
+      order: 9999
+archives:
+  - format: binary
