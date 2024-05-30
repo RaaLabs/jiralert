@@ -1,6 +1,6 @@
 module github.com/prometheus-community/jiralert
 
-go 1.19
+go 1.22
 
 require (
 	github.com/andygrunwald/go-jira v1.16.0
