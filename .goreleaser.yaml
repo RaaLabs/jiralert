@@ -8,6 +8,7 @@ builds:
     env: [ CGO_ENABLED=0 ]
     goos: [ linux ]
     goarch: [ amd64 ]
+    main: ./cmd/jiralert/main.go
 dockers:
   - use: buildx
     image_templates:
