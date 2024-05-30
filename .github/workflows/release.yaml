@@ -1,0 +1,14 @@
+name: Release Docker image
+
+env:
+    DOCKER_REGISTRY: ghcr.io/RaaLabs
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+    release:
+        uses: RaaLabs/reusable-workflows/.github/workflows/golang-release.yml@main
+        secrets: inherit
