@@ -207,6 +207,12 @@ func (c *Config) UnmarshalYAML(unmarshal func(interface{}) error) error {
 		return err
 	}
 
+	// Check if password should be read from an environment variable
+	if strings.HasPrefix(string(c.Defaults.Password), "ENV:") {
+		envVar := strings.TrimPrefix(string(c.Defaults.Password), "ENV:")
+		c.Defaults.Password = Secret(os.Getenv(envVar))
+	}
+
 	if (c.Defaults.User != "" || c.Defaults.Password != "") && c.Defaults.PersonalAccessToken != "" {
 		return fmt.Errorf("bad auth config in defaults section: user/password and PAT authentication are mutually exclusive")
 	}
