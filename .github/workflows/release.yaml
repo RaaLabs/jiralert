@@ -12,7 +12,7 @@ jobs:
     ci:
         name: Release
         runs-on: ubuntu-latest
-        env:    
+        env:
           RELEASE: ${{ github.event_name == 'push' && contains(inputs.branches || 'main,master', github.ref_name) }}
         steps:
         - uses: actions/checkout@v4
